@@ -1,7 +1,6 @@
 package com.spring.ai.demo.ex.springopenaidemo.controller;
 
-import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.spring.ai.demo.ex.springopenaidemo.service.impl.ChatServiceImpl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,19 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class OpenAIController {
 
-    private final ChatClient chatClient;
+    private final ChatServiceImpl chatServiceImpl;
 
-    public OpenAIController(@Qualifier("openAiChatClientBean") ChatClient chatClient) {
-        this.chatClient = chatClient;
+    public OpenAIController(ChatServiceImpl chatServiceImpl) {
+        this.chatServiceImpl = chatServiceImpl;
     }
 
     @GetMapping("/ask")
     public ResponseEntity<String> ask(@RequestParam(value = "q", required = true) String question) {
-       return ResponseEntity
-               .ok(chatClient
-                       .prompt()
-                       .user(question)
-                       .call()
-                       .content());
+       return chatServiceImpl.content(question);
     }
+
 }
