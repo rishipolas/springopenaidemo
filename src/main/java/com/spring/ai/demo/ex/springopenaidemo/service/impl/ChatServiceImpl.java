@@ -26,7 +26,18 @@ public class ChatServiceImpl implements ChatServiceI {
     }
 
     private  List<Respond> getChatClient(String question) {
-           return chatClient.prompt(question)
+
+//        Prompt prompt = new Prompt(question, OpenAiChatOptions
+//                .builder()
+//                .model("gpt-5.6-luna")
+//                .temperature(0.2)
+//                .maxTokens(100)
+//                .maxRetries(2)
+//                .build());
+
+//        Prompt prompt = new Prompt(question);
+
+        return chatClient.prompt(question)
                     .call()
                     .entity(new ParameterizedTypeReference<List<Respond>>() {});
 

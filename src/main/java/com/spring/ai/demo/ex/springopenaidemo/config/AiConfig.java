@@ -10,6 +10,16 @@ public class AiConfig {
 
     @Bean(name = "openAiChatClientBean")
     public ChatClient openAiChatModel(OpenAiChatModel openAiChatModel) {
-        return ChatClient.builder(openAiChatModel).build();
+        return ChatClient.builder(openAiChatModel)
+//                .defaultAdvisors() //intercepter
+//                .defaultSystem("You're an expert")
+//                .defaultOptions(
+//                        OpenAiChatOptions
+//                                .builder()
+//                                .model("gpt-5.6-luna")
+//                                .temperature(0.2)
+//                                .maxTokens(100)
+//                                .maxRetries(2)) // you can set as default one.
+                .build();
     }
 }
