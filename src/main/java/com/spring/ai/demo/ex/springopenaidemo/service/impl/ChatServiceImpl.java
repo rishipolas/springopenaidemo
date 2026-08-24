@@ -36,8 +36,9 @@ public class ChatServiceImpl implements ChatServiceI {
 //                .build());
 
 //        Prompt prompt = new Prompt(question);
-
+        String s = "You are a code expert :{query}";
         return chatClient.prompt(question)
+                    .user(u ->  u.text(s).param("query", " Professional to look as Architect."))
                     .call()
                     .entity(new ParameterizedTypeReference<List<Respond>>() {});
 
