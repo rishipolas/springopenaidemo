@@ -23,4 +23,9 @@ public class OpenAIController {
        return chatServiceImpl.content(question);
     }
 
+    @GetMapping("/usePromptTemplate")
+    public  ResponseEntity<String> usePromptTemplate(@RequestParam(value = "subject", required = true) String subject, @RequestParam(value = "topic", required = true) String topic) {
+        return chatServiceImpl.usePromptTemplate(subject, topic);
+    }
+
 }

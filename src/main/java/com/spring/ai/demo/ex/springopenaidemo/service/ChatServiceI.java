@@ -8,4 +8,6 @@ import java.util.List;
 public interface ChatServiceI {
 
     ResponseEntity<List<Respond>> content(String question);
+
+    ResponseEntity<String> usePromptTemplate(String subject, String topic);
 }

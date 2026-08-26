@@ -3,12 +3,15 @@ package com.spring.ai.demo.ex.springopenaidemo.service.impl;
 import com.spring.ai.demo.ex.springopenaidemo.entity.Respond;
 import com.spring.ai.demo.ex.springopenaidemo.service.ChatServiceI;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ChatServiceImpl implements ChatServiceI {
@@ -23,6 +26,25 @@ public class ChatServiceImpl implements ChatServiceI {
     public ResponseEntity<List<Respond>> content(String question) {
         return ResponseEntity
                 .ok(this.getChatClient(question));
+    }
+
+    @Override
+    public ResponseEntity<String> usePromptTemplate(String subject, String topic) {
+        //Prompt template use
+        var template = PromptTemplate.builder().template("What is {subject} and give me the example of this {topic}").build();
+
+        //use render to complete the prompt template
+        var render = template.render(Map.of(
+                "subject", subject,
+                "topic", topic
+        ));
+
+        //final
+        var prompt = new Prompt(render);
+
+
+        return ResponseEntity
+                .ok(chatClient.prompt(prompt).call().content());
     }
 
     private  List<Respond> getChatClient(String question) {
