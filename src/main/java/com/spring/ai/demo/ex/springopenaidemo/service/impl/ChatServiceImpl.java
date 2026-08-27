@@ -6,7 +6,9 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,9 @@ import java.util.Map;
 
 @Service
 public class ChatServiceImpl implements ChatServiceI {
+
+    @Value("classpath:/prompt/system-message.st")
+    private Resource resource;
 
     private final ChatClient chatClient;
 
@@ -42,9 +47,24 @@ public class ChatServiceImpl implements ChatServiceI {
         //final
         var prompt = new Prompt(render);
 
+        // WAY 2 alternative use
+//        chatClient.prompt()
+//                .system(system -> system.text("you are a professional candidate: {subject}").param("subject", subject))
+//                .user(user ->  user.text("give me the example of this very brief : {topic}").param("topic", topic))
+//                .call().content();
+
+
+        //WAY 1
+//        return ResponseEntity
+//                .ok(chatClient.prompt(prompt).call().content());
 
         return ResponseEntity
-                .ok(chatClient.prompt(prompt).call().content());
+                .ok(chatClient.prompt()
+                        .system(system -> system.text("you are a professional candidate: {subject}").param("subject", subject))
+                        .user(user -> user.text(this.resource).param("topic",topic))
+                        .call()
+                        .content()
+                );
     }
 
     private  List<Respond> getChatClient(String question) {
